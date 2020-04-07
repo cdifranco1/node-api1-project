@@ -17,23 +17,19 @@ let users = [
   }
 ]
 
-
 //endpoints
-
 server.get('/api/users', (req, res) => {
-  if (!users){
+  if (!users.length){
     return res.status(500).json({errorMessage: "The users information could not be retrieved."})
+  } else {
+    res.json(users)
   }
-
-  res.json(users)
 })
 
 server.get('/api/users/:id', (req, res) => {
-  console.log(req.params.id)
   let index = users.findIndex(el => {
     return el.id === req.params.id
   })
-  console.log(index)
   if (!(index >= 0)){
     res.status(404).json({message: "The user with the specified ID does not exist."})
   } else {
