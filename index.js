@@ -64,6 +64,32 @@ server.delete(`/api/users/:id`, (req, res) => {
   }
 })
 
+server.put(`/api/users/:id`, (req, res) => {
+  console.log(req.params.id)
+  let index = users.findIndex(el => {
+    console.log(el.id, req.params.id)
+    return el.id === req.params.id
+  })
+  console.log(index)
+  if (index < 0){
+    res.status(404).json({ message: "The user with the specified ID does not exist"})
+  } else if (!req.body.name || !req.body.bio){
+    res.status(404).json({ message: "Please provide name and bio for the user." })
+  } else  {
+    users = users.map(el => {
+      if (el.id === req.params.id){
+        return {
+          ...el,
+          ...req.body
+        }
+      } else {
+        return el
+      }
+    })
+    res.status(200).json(users)
+  }
+})
+
 //port
 const port = 5000
 server.listen(port, () => {
